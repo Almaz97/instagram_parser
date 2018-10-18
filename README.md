@@ -8,5 +8,5 @@
 
 ### How to use:
     1.Install dependencies in 'requirements.txt'
-    2.Write your username and password in enviroment variables
+    2.Write your username and password in environment variables
     3.Run app, check the result in localhost:5000/. For inital request, app just initializes TOTAL variable
