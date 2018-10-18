@@ -1,34 +1,30 @@
 from flask import Flask
 from instaparser.agents import AgentAccount
 import json
-import os
 
 app = Flask(__name__)
+TOTAL = None
 
 
 def getFollowers(username, password):
-
+    global TOTAL
     account = AgentAccount(username, password)
     amt_of_followers = account.followers_count
-
-    with open('amount.txt', 'r') as amount:
-        if os.stat("amount.txt").st_size != 0:
-            total = int(amount.read())
-        else:
-            total = amt_of_followers
-
-    with open('amount.txt', 'w') as amount:
-        amount.write(str(amt_of_followers))
-
+    print(amt_of_followers)
     foll_dict = dict()
     foll_dict['profile'] = username
     foll_dict['number'] = amt_of_followers
 
-    if amt_of_followers > total:
-        diff = amt_of_followers - total
-        get_new_followers = account.get_followers(account=account, count=diff)
-        new_followers = [str(item) for item in get_new_followers[0]]
-        foll_dict['followed_by'] = new_followers
+    if TOTAL is None:
+        TOTAL = amt_of_followers
+    else:
+        if amt_of_followers > TOTAL:
+            diff = amt_of_followers - TOTAL
+            get_new_followers = account.get_followers(account=account, count=diff)
+            new_followers = [str(item) for item in get_new_followers[0]]
+            foll_dict['followed_by'] = new_followers
+        elif amt_of_followers < TOTAL:
+            TOTAL = amt_of_followers
 
     return foll_dict
 
@@ -36,8 +32,8 @@ def getFollowers(username, password):
 @app.route('/')
 def index():
 
-    username = 'yourusername'
-    password = 'yourpassword'
+    username = 'carato_me'
+    password = 'needwebhooks2020'
 
     foll_dict = getFollowers(username, password)
 
