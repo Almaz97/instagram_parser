@@ -5,12 +5,14 @@ import os
 
 app = Flask(__name__)
 TOTAL = None
+username = os.environ.get('INSTAGRAM_USERNAME')
+password = os.environ.get('INSTAGRAM_PASSWORD')
+account = AgentAccount(username, password)
 
-
-def getFollowers(username, password):
+def getFollowers():
     global TOTAL
-
-    account = AgentAccount(username, password)
+    account.update(account)
+    
     amt_of_followers = account.followers_count
     foll_dict = dict()
     foll_dict['profile'] = username
@@ -28,17 +30,13 @@ def getFollowers(username, password):
         elif amt_of_followers < TOTAL:
             TOTAL = amt_of_followers
 
-    account.update(account)
     return foll_dict
 
 
 @app.route('/')
 def index():
 
-    username = os.environ.get('INSTAGRAM_USERNAME')
-    password = os.environ.get('INSTAGRAM_PASSWORD')
-
-    foll_dict = getFollowers(username, password)
+    foll_dict = getFollowers()
 
     return json.dumps(foll_dict) # Return serialized python dictionary to json
 
