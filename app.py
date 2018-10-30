@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_file
 from instaparser.agents import AgentAccount
 import json
 import os
@@ -8,11 +8,12 @@ TOTAL = None
 username = os.environ.get('INSTAGRAM_USERNAME')
 password = os.environ.get('INSTAGRAM_PASSWORD')
 account = AgentAccount(username, password)
+file_name = os.environ.get("FILE_PATH")
 
 def getFollowers():
     global TOTAL
     account.update(account)
-    
+
     amt_of_followers = account.followers_count
     foll_dict = dict()
     foll_dict['profile'] = username
@@ -39,6 +40,11 @@ def index():
     foll_dict = getFollowers()
 
     return json.dumps(foll_dict) # Return serialized python dictionary to json
+
+
+@app.route('/return-gifs')
+def return_file():
+    return send_file(file_name)
 
 
 if __name__ == '__main__':
