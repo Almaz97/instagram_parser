@@ -1,4 +1,4 @@
-from flask import Flask, send_file
+from flask import Flask, send_file, send_from_directory
 from instaparser.agents import AgentAccount
 import json
 import os
@@ -8,7 +8,8 @@ TOTAL = None
 username = os.environ.get('INSTAGRAM_USERNAME')
 password = os.environ.get('INSTAGRAM_PASSWORD')
 account = AgentAccount(username, password)
-file_name = os.environ.get("FILE_PATH")
+file_path = os.environ.get("FILE_PATH")
+file_name = 'gif1.zip'
 
 def getFollowers():
     global TOTAL
@@ -44,7 +45,7 @@ def index():
 
 @app.route('/return-gifs')
 def return_file():
-    return send_file(file_name)
+    return send_from_directory(file_path, file_name, as_attachment=True)
 
 
 if __name__ == '__main__':
