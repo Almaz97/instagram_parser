@@ -9,7 +9,7 @@ username = os.environ.get('INSTAGRAM_USERNAME')
 password = os.environ.get('INSTAGRAM_PASSWORD')
 account = AgentAccount(username, password)
 file_path = os.environ.get("FILE_PATH")
-file_name = 'gif1.zip'
+file_name = os.environ.get("FILE_NAME")
 
 def getFollowers():
     global TOTAL
